@@ -33,6 +33,6 @@ run: build
 	-v $(ROOT_DIR)/my_keys:/config \
 	--env-file make.env \
 	$(DOCKER_IMAGE) \
-	-v
+	compute instance list --compartment-id=${OCI_CLI_TENANCY}
 	
 # --entrypoint=/bin/ash \
