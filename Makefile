@@ -2,7 +2,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 DOCKER_IMAGE=oci-cli-slim
 
-.PHONY: build clean run run2
+.PHONY: lint build clean run run2
 
 make.env:
 	if [ ! -f "make.env" ]; then \
@@ -11,6 +11,14 @@ make.env:
 	fi
 
 include make.env
+
+
+lint: 
+	clear
+	docker run --rm \
+	-e RUN_LOCAL=true \
+	-v $(ROOT_DIR):/tmp/lint \
+	github/super-linter:slim-v4
 
 clean:
 	docker rmi $(DOCKER_IMAGE)
