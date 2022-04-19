@@ -20,6 +20,14 @@ lint:
 	-v $(ROOT_DIR):/tmp/lint \
 	github/super-linter:slim-v4
 
+lint-docker: 
+	clear
+	docker run --rm \
+	-e RUN_LOCAL=true \
+	-e VALIDATE_DOCKERFILE_HADOLINT=true \
+	-v $(ROOT_DIR):/tmp/lint \
+	github/super-linter:slim-v4
+
 clean:
 	docker rmi $(DOCKER_IMAGE)
 	docker builder prune --all --force
