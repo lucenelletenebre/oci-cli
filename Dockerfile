@@ -35,4 +35,7 @@ FROM alpine:latest
 
 COPY --from=build-stage /app/dist/oci.exe /oci.exe
 
-ENTRYPOINT /oci.exe/oci.exe
+ENTRYPOINT ["/oci.exe/oci.exe"]
+# ENTRYPOINT  ["/bin/ash", "-c", "/oci.exe/oci.exe \"$0\" \"$@\"", "--"]
+# ENTRYPOINT echo "bello>" "$0" "$@" "<xxx"
+# ENTRYPOINT /oci.exe/oci.exe "$0" "$@"
