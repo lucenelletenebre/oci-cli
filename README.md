@@ -2,7 +2,7 @@
 
 Docker container for runing Oracle Cloud Infranstructure CLI.
 
-Main advantages of this container is it size: less than 50MB. Designed to work on GitHub workflows (less size, faster download)
+Main advantages of this container is it size: less than 30MB compressed. Designed to work on GitHub workflows (less size, faster download)
 
 This version implement only service.core functionality (for my use case I needed only oci.compute, see [here](#Background))
 
