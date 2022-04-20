@@ -4,7 +4,7 @@ Docker container for runing Oracle Cloud Infranstructure CLI.
 
 Main advantages of this container is it size: less than 50MB. Designed to work on GitHub workflows (less size, faster download)
 
-This version implement only service.core functionality (for my use case I needed only oci.compute, see [here](##Background))
+This version implement only service.core functionality (for my use case I needed only oci.compute, see [here](#Background))
 
 ## Usage
 One of the ways you can use oci-cli is by passing enviroment variable to the docker file
@@ -29,3 +29,6 @@ So, why the hell spend time to pack the oci-cli in onother docker container? Why
 ## Note
 If you want to expand the service available, modify the file `compile.py` commenting out the line `--collect-all=services.core` and enabling `--collect-all=services` will install all oci services.
 Recompile using docker image using `make build` or `docker build -t <IMAGE NAME> .`
+
+## Warning
+A fair warning: pretty much all oci-cli funcionality under Pyinstaller is untested in this container! It should work but...
