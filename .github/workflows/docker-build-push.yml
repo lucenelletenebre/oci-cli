@@ -1,0 +1,35 @@
+---
+name: Docker Image CI
+
+on:
+  push:
+    # branches:
+    #   - main
+    # paths-ignore:
+    #   - '**.md'
+    #   - 'debug**'
+    #   - 'debug/**'
+    #   - 'test/**'
+    #   - '.github/**'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run publish-docker
+        id: run-publish-docker
+        uses: lucenelletenebre/publish-docker@v1
+        with:
+          # docker-context: . # OPTIONAL (folder with docker file)
+          # docker-registry: ghcr.io # OPTIONAL (docker registry)
+          # docker-platforms: linux/amd64,linux/arm64 # OPTIONAL (docker arch)
+          # docker-push: true # OPTIONAL (push image to registry)
+          username: ${{ github.repository_owner }} # Docker repository username
+          password: ${{ secrets.GITHUB_TOKEN }} # Docker repository password
+          docker-image: ghcr.io/lucenelletenebre/oci-cli-slim # Name of docker image
