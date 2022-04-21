@@ -3,7 +3,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 DOCKER_IMAGE=oci-cli-slim
 DOCKER_IMAGE_PROD=ghcr.io/lucenelletenebre/oci-cli-slim
 
-.PHONY: lint build clean get-size run run2 run-deploy
+.PHONY: lint clean get-size run run2 run-deploy
 
 make.env:
 	if [ ! -f "make.env" ]; then \
@@ -29,29 +29,47 @@ lint-docker:
 	github/super-linter:slim-v4
 
 clean:
-	docker rmi $(DOCKER_IMAGE)
-	docker rmi $(DOCKER_IMAGE_PROD)
-	docker builder prune --all --force
+	@clear
+	@if [ -f ".build" ]; then \
+		rm .build; \
+	fi
+	@data=$(shell docker ps --filter status=exited -q); \
+	if [ ! -z "$$data" ]; then \
+		docker rm $$data;\
+	fi
+	@data=$(shell docker images --filter dangling=true -q --no-trunc); \
+	if [ ! -z "$$data" ]; then \
+		docker rmi $$data;\
+	fi
+	@data=$(shell docker images -q $(DOCKER_IMAGE)); \
+	if [ ! -z "$$data" ]; then \
+		docker rmi $$data;\
+	fi
+	@data=$(shell docker images -q $(DOCKER_IMAGE_PROD)); \
+	if [ ! -z "$$data" ]; then \
+		docker rmi $$data;\
+	fi
 
-build:
+.build: Dockerfile *.py *.txt
+	touch .build
 	docker build \
 	-t $(DOCKER_IMAGE) \
 	.
 
-get-size: build
+get-size: .build
 	docker save $(DOCKER_IMAGE) -o $(DOCKER_IMAGE).tar
 	gzip $(DOCKER_IMAGE).tar
 	ls -lh $(DOCKER_IMAGE).tar.gz
 	rm $(DOCKER_IMAGE).tar.gz
 
-run2: build
+run2: .build
 	docker run --rm -it \
 	-v $(ROOT_DIR)/my_keys:/config \
 	--env-file make.env \
 	$(DOCKER_IMAGE) \
 	compute instance get --instance-id=${INSTANCE_ID}
 
-run: build
+run: .build
 	docker run --rm -it \
 	-v $(ROOT_DIR)/my_keys:/config \
 	--env-file make.env \
