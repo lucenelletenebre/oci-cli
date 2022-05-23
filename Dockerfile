@@ -30,7 +30,7 @@ RUN mv /app/venv/bin/oci /app/ && python compile.py
 # FROM gcr.io/distroless/base-debian11
 # FROM gcr.io/distroless/static-debian11
 # FROM python:3.10.2-bullseye
-FROM alpine:3.15
+FROM alpine:3.16.0
 
 COPY --from=build-stage /app/dist/oci.exe /oci.exe
 
